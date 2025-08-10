@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #497D74;
+    padding: 10px 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.logo span {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+nav ul li {
+    text-align: center;
+}
+nav a {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+nav a:hover {
+    background-color: #00C49a;
+}
+.container1 {
+    margin: 20px auto;
+    padding: 30px;
+    background-color: white;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+}
+h2 {
+    font-size: 28px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+.profile-info {
+    display: grid;
+    gap: 20px;
+}
+.profile-details p {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+.profile-details strong {
+    color: #1abc9c;
+}
+.settings_button,
+.logout_button {
+    background: #1abc9c;
+    color: #fff;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+}
+.settings_button:hover,
+.logout_button:hover {
+    background: #16a085;
+}
+@media (max-width: 768px) {
+    nav {
+        padding: 10px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+    nav ul li {
+        width: 100%;
+    }
+    nav a {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+    .logo span {
+        font-size: 20px;
+    }
+    .container1 {
+        margin: 10px;
+        padding: 20px;
+    }
+    .settings_button,
+    .logout_button {
+        width: 100%;
+    }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo">
+        <span>Employee Dashboard</span>
+    </div>
+    <ul>
+        <li><a href="{{ url_for('home') }}"><i class="fas fa-users"></i> Return</a></li>
+        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+</nav>
+
+<div class="container1">
+    <h2>Welcome, {{ name }}!</h2>
+    <div class="profile-info">
+        <div class="profile-details">
+            <p><strong>Name:</strong> {{ name }}</p>
+            <p><strong>Age:</strong> {{ age }}</p>
+            <p><strong>Address:</strong> {{ address }}</p>
+            <p><strong>Gender:</strong> {{ gender }}</p>
+            <p><strong>Marital Status:</strong> {{ status }}</p>
+            <p><strong>Contact Number:</strong> {{ contact }}</p>
+            <p><strong>Work Position:</strong> {{ position }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
+            <button id="edit_profile" class="settings_button">Edit Profile</button>
+            <button id="logout" class="logout_button">Return</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

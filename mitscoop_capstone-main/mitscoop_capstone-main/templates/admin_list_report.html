@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #497D74;
+    padding: 10px 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.logo span {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px;
+}
+nav ul li {
+    text-align: center;
+}
+nav a {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+nav a:hover {
+    background-color: #00C49a;
+}
+.container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #A3D1C6;
+    flex-wrap: wrap;
+}
+.container1 {
+    width: 100%;
+    max-width: 1200px;
+}
+h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #333;
+}
+.report-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+.report-card {
+    background: #f9f9f9;
+    color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.report-card span {
+    font-size: 18px;
+    font-weight: 600;
+}
+#view-btn,
+.check-btn,
+.delete_btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+#view-btn {
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+}
+#view-btn:hover {
+    background-color: #388E3C;
+}
+.check-btn {
+    background-color: blue;
+    color: white;
+    border: none;
+}
+.check-btn:hover:enabled {
+    background-color: darkblue;
+}
+.delete_btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+.delete_btn:hover:enabled {
+    background-color: #c82333;
+}
+button:disabled {
+    background-color: #999 !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+@media (max-width: 768px) {
+    nav {
+        padding: 10px 20px;
+    }
+    .logo img {
+        width: 40px;
+        height: 40px;
+    }
+    .logo span {
+        display: none;
+    }
+    nav ul {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .report-card {
+        font-size: 14px;
+    }
+    .report-card span {
+        font-size: 16px;
+    }
+}
+@media (max-width: 480px) {
+    .report-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .report-card span {
+        font-size: 14px;
+    }
+    #view-btn, .check-btn, .delete_btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+</head>
+<body>
+<nav>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo">
+        <span>Employee Reports Dashboard</span>
+    </div>
+    <ul>
+        <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-sign-out-alt"></i> Return</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="container1">
+        <h2>Reports Submitted</h2>
+
+        <div class="d-flex justify-content-end align-items-center mb-3" style="gap: 10px; flex-wrap: wrap;">
+            <input type="text" id="searchInput" class="form-control form-control-sm w-auto" placeholder="Search..." style="min-width: 200px; flex: 1;">
+            <select id="statusFilter" class="form-select form-select-sm w-auto" style="flex: 1;">
+                <option value="">All</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="review">Pending</option>
+            </select>
+        </div>
+
+        <ul class="report-list" id="reportList">
+            {% for reportt in report|reverse %}
+            <li class="report-card" 
+                data-name="{{ reportt[2]|lower }}" 
+                data-task="{{ reportt[3]|lower }}" 
+                data-status="{{ reportt[4] }}">
+                
+                <div>
+                    <span>Report: {{ reportt[3] }}</span><br>
+                    <span>by {{ reportt[2] }}</span><br>
+                    {% if reportt[4] == 'approved' %}
+                        <span class="text-success">✅ Approved</span>
+                    {% elif reportt[4] == 'rejected' %}
+                        <span class="text-danger">❌ Rejected</span>
+                    {% elif reportt[4] == 'review' %}
+                        <span class="text-warning">⏳ Pending</span>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2 w-100">
+                    <a href="#" class="btn btn-primary open-modal"
+                       data-bs-toggle="modal"
+                       data-bs-target="#fbModal"
+                       data-image-url="{{ url_for('view', report_id=reportt[0]) }}"
+                       data-task="{{ reportt[3] }}"
+                       data-message="{{ reportt[1] }}">
+                       View
+                    </a>
+
+                    <form action="{{ url_for('check', report_id=reportt[0]) }}" method="POST">
+                        <button type="submit" class="action_btn check-btn"
+                                {% if reportt[4] != 'review' %}disabled{% endif %}>
+                            Approve
+                        </button>
+                    </form>
+
+                    <form action="/reject_task/{{reportt[0]}}" method="POST">
+                        <button type="submit" class="delete_btn"
+                                {% if reportt[4] != 'review' %}disabled{% endif %}>
+                            Reject
+                        </button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="fbModal" tabindex="-1" aria-labelledby="fbModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body p-0 d-flex flex-wrap">
+                <div class="col-md-6 col-12">
+                    <img id="modalImage" src="" alt="Post Photo" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                </div>
+                <div class="col-md-6 col-12 p-4">
+                    <h4 class="modal-title" id="modalTask"></h4>
+                    <h5 id="modalMessage"></h5>
+                    <button class="btn btn-secondary mt-3" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search & Filter Script -->
+<script>
+const searchInput = document.getElementById('searchInput');
+const statusFilter = document.getElementById('statusFilter');
+const reportItems = document.querySelectorAll('.report-card');
+
+function filterReports() {
+    const query = searchInput.value.toLowerCase();
+    const selectedStatus = statusFilter.value;
+    reportItems.forEach(item => {
+        const name = item.getAttribute('data-name');
+        const task = item.getAttribute('data-task');
+        const status = item.getAttribute('data-status');
+        const matchText = name.includes(query) || task.includes(query);
+        const matchStatus = !selectedStatus || status === selectedStatus;
+        item.style.display = matchText && matchStatus ? 'flex' : 'none';
+    });
+}
+searchInput.addEventListener('input', filterReports);
+statusFilter.addEventListener('change', filterReports);
+</script>
+
+<!-- Modal Fill Script -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const image = document.getElementById('modalImage');
+  const task = document.getElementById('modalTask');
+  const message = document.getElementById('modalMessage');
+  document.querySelectorAll('.open-modal').forEach(button => {
+    button.addEventListener('click', () => {
+      image.src = button.getAttribute('data-image-url');
+      task.textContent = `TASK: ${button.getAttribute('data-task')}`;
+      message.textContent = `Message: ${button.getAttribute('data-message')}`;
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #A3D1C6;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #497D74;
+    padding: 10px 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.logo span {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 30px;
+}
+nav a {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+nav a:hover {
+    background-color: #00C49a;
+    color: #fff;
+}
+.table-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    min-width: 500px;
+}
+.attendance-table th,
+.attendance-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+.attendance-table th {
+    background-color: #00C49a;
+    color: white;
+}
+.attendance-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+@media (max-width: 768px) {
+    nav {
+        flex-wrap: wrap;
+        padding: 10px 20px;
+    }
+    .logo img {
+        width: 40px;
+        height: 40px;
+    }
+    .logo span {
+        font-size: 18px;
+    }
+    nav ul {
+        gap: 15px;
+    }
+    nav a {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+    .table-container {
+        width: 95%;
+        padding: 15px;
+    }
+    .attendance-table th,
+    .attendance-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+@media (max-width: 480px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+    .logo span {
+        display: none;
+    }
+}
+</style>
+</head>
+<body>
+<nav>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo">
+        <span>Admin Dashboard</span>
+    </div>
+    <ul>
+        <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-sign-out-alt"></i> Return </a></li>
+    </ul>
+</nav>
+<div class="table-container">
+    <h2>Employee Attendance Records</h2>
+    <table class="attendance-table">
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Date & Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in attendance %}
+            <tr>
+                <td>{{ record[1] }}</td>
+                <td>{{ record[2] }} | {{ record[3] }}</td>
+                <td>{{ record[4] }}</td>  
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
